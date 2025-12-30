@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Connect 4</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="connect4.css" />
+</head>
+<body>
+  <div class="app">
+    <main class="stage">
+      <div class="board-wrap">
+        <div class="top-row">
+          <!-- Hover/preview marker (for future JS) -->
+          <div id="preview" class="preview hidden"></div>
+        </div>
+        <div id="board" class="board" role="grid" aria-label="Connect 4">
+          <!-- 6x7 cells; JS will populate or you can leave them static -->
+          <!-- Rows rendered top-to-bottom for UI; game logic can map r index accordingly -->
+          <!-- Each .cell gets data-r, data-c -->
+          <!-- You can also render these from JS; static structure provided for convenience -->
+          <!-- Row 0 -->
+          <div class="cell" data-r="0" data-c="0"></div>
+          <div class="cell" data-r="0" data-c="1"></div>
+          <div class="cell" data-r="0" data-c="2"></div>
+          <div class="cell" data-r="0" data-c="3"></div>
+          <div class="cell" data-r="0" data-c="4"></div>
+          <div class="cell" data-r="0" data-c="5"></div>
+          <div class="cell" data-r="0" data-c="6"></div>
+          <!-- Row 1 -->
+          <div class="cell" data-r="1" data-c="0"></div>
+          <div class="cell" data-r="1" data-c="1"></div>
+          <div class="cell" data-r="1" data-c="2"></div>
+          <div class="cell" data-r="1" data-c="3"></div>
+          <div class="cell" data-r="1" data-c="4"></div>
+          <div class="cell" data-r="1" data-c="5"></div>
+          <div class="cell" data-r="1" data-c="6"></div>
+          <!-- Row 2 -->
+          <div class="cell" data-r="2" data-c="0"></div>
+          <div class="cell" data-r="2" data-c="1"></div>
+          <div class="cell" data-r="2" data-c="2"></div>
+          <div class="cell" data-r="2" data-c="3"></div>
+          <div class="cell" data-r="2" data-c="4"></div>
+          <div class="cell" data-r="2" data-c="5"></div>
+          <div class="cell" data-r="2" data-c="6"></div>
+          <!-- Row 3 -->
+          <div class="cell" data-r="3" data-c="0"></div>
+          <div class="cell" data-r="3" data-c="1"></div>
+          <div class="cell" data-r="3" data-c="2"></div>
+          <div class="cell" data-r="3" data-c="3"></div>
+          <div class="cell" data-r="3" data-c="4"></div>
+          <div class="cell" data-r="3" data-c="5"></div>
+          <div class="cell" data-r="3" data-c="6"></div>
+          <!-- Row 4 -->
+          <div class="cell" data-r="4" data-c="0"></div>
+          <div class="cell" data-r="4" data-c="1"></div>
+          <div class="cell" data-r="4" data-c="2"></div>
+          <div class="cell" data-r="4" data-c="3"></div>
+          <div class="cell" data-r="4" data-c="4"></div>
+          <div class="cell" data-r="4" data-c="5"></div>
+          <div class="cell" data-r="4" data-c="6"></div>
+          <!-- Row 5 -->
+          <div class="cell" data-r="5" data-c="0"></div>
+          <div class="cell" data-r="5" data-c="1"></div>
+          <div class="cell" data-r="5" data-c="2"></div>
+          <div class="cell" data-r="5" data-c="3"></div>
+          <div class="cell" data-r="5" data-c="4"></div>
+          <div class="cell" data-r="5" data-c="5"></div>
+          <div class="cell" data-r="5" data-c="6"></div>
+        </div>
+      </div>
+
+      <aside class="panel">
+        <div class="title-wrapper">
+          <svg class="game-icon" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="2" width="36" height="36" rx="4" fill="url(#gradient1)" stroke="white" stroke-width="2"/>
+            <circle cx="12" cy="12" r="4" fill="#ff6b6b"/>
+            <circle cx="28" cy="12" r="4" fill="#ffd93d"/>
+            <circle cx="12" cy="28" r="4" fill="#ffd93d"/>
+            <circle cx="28" cy="28" r="4" fill="#ff6b6b"/>
+            <defs>
+              <linearGradient id="gradient1" x1="2" y1="2" x2="38" y2="38">
+                <stop offset="0%" stop-color="#2d3561"/>
+                <stop offset="100%" stop-color="#0f1b3c"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <h1 class="title">Connect 4</h1>
+        </div>
+
+        <div id="status" class="status">Ready</div>
+
+        <div class="controls">
+          <label class="control">
+            <span>Mode</span>
+            <select id="mode">
+              <option value="pvai" selected>Player vs AI</option>
+              <option value="aivai">AI vs AI</option>
+            </select>
+          </label>
+
+          <label class="control">
+            <span>Player 1</span>
+            <select id="p1-type">
+              <option value="human" selected>Human</option>
+              <option value="ai">AI</option>
+            </select>
+          </label>
+
+          <label class="control">
+            <span>P1 Difficulty</span>
+            <select id="p1-level">
+              <option value="easy">Easy</option>
+              <option value="medium" selected>Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </label>
+
+          <label class="control">
+            <span>P2 Difficulty</span>
+            <select id="p2-level">
+              <option value="easy">Easy</option>
+              <option value="medium" selected>Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </label>
+
+          <div class="buttons">
+            <button id="start-btn" class="btn">Start</button>
+            <button id="reset-btn" class="btn secondary">Reset</button>
+          </div>
+
+          <button id="hint-btn" class="btn hint-btn" title="Get a hint for your next move">
+            💡 Get Hint
+          </button>
+          <div id="hint-message" class="hint-message hidden"></div>
+        </div>
+
+        <div class="legend">
+          <span class="disc p1" aria-hidden="true"></span>
+          <span>Player 1</span>
+          <span class="disc p2" aria-hidden="true"></span>
+          <span>Player 2</span>
+        </div>
+      </aside>
+
+      <aside class="panel history-panel">
+        <div class="move-history">
+          <div class="history-header">
+            <h3>📜 Move History</h3>
+            <button id="clear-history-btn" class="clear-btn" title="Clear history">🗑️</button>
+          </div>
+          <div id="move-list" class="move-list">
+            <p class="empty-history">No moves yet. Start playing!</p>
+          </div>
+          <div class="game-stats hidden" id="game-stats">
+            <div class="stat">
+              <span class="stat-label">Total Moves:</span>
+              <span class="stat-value" id="total-moves">0</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Game Duration:</span>
+              <span class="stat-value" id="game-duration">0:00</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Victory Popup -->
+    <div id="victory-popup" class="victory-popup hidden">
+      <div class="victory-content">
+        <div class="confetti-container" id="confetti-container"></div>
+        <div class="trophy-icon">🏆</div>
+        <h2 class="victory-title" id="victory-title">Player 1 Wins!</h2>
+        <p class="victory-message">Congratulations on your victory!</p>
+        <button id="play-again-btn" class="btn victory-btn">Play Again</button>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="connect4.js"></script>
+</html>
